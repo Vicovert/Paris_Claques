@@ -7,18 +7,18 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.json">
-<title>Paris Claques - Guerre Civile</title>
+<title>Paris Claques - Flash Arcade Edition</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Bungee&family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0d0f12;
-  --panel: rgba(18, 22, 28, 0.9);
-  --accent: #ff4757;
-  --gold: #ffa502;
-  --blue: #1e90ff;
-  --yellow: #f1c40f;
+  --bg: #050507;
+  --panel: #141720;
+  --accent: #ff2e43;
+  --gold: #ffbe0b;
+  --blue: #00b4d8;
+  --yellow: #ffdd00;
 }
 * {
   box-sizing: border-box;
@@ -32,7 +32,7 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: var(--bg);
+  background: radial-gradient(circle, #2b3248 0%, #050507 100%);
   font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color: #fff;
   touch-action: none;
@@ -44,7 +44,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at center, #181d24 0%, #08090c 100%);
+  background: #020204;
 }
 canvas {
   display: block;
@@ -52,8 +52,9 @@ canvas {
   max-height: 100%;
   aspect-ratio: 2 / 3;
   image-rendering: pixelated;
-  box-shadow: 0 12px 50px rgba(0,0,0,0.85);
-  border-radius: 8px;
+  box-shadow: 0 0 60px rgba(0,0,0,0.95), 0 0 30px rgba(255,46,67,0.2);
+  border: 4px solid #283142;
+  border-radius: 4px;
 }
 
 /* UI Overlay */
@@ -80,45 +81,43 @@ canvas {
   margin: 0 auto;
 }
 .hud-card {
-  background: rgba(16, 20, 26, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1.5px solid rgba(255, 255, 255, 0.15);
-  border-radius: 14px;
-  padding: 6px 14px;
+  background: #111520;
+  border: 3px solid #323e54;
+  border-radius: 6px;
+  padding: 4px 12px;
   display: flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.5);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.15), 0 6px 12px rgba(0,0,0,0.8);
 }
 .hearts-container {
   display: flex;
-  gap: 2px;
+  gap: 3px;
 }
 .heart-icon {
-  font-size: 17px;
-  filter: drop-shadow(0 2px 4px rgba(255, 71, 87, 0.6));
-  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-size: 16px;
+  filter: drop-shadow(0 2px 2px rgba(255, 46, 67, 0.8));
+  transition: transform 0.2s;
 }
 .heart-icon.lost {
   filter: grayscale(1) opacity(0.25);
-  transform: scale(0.75);
+  transform: scale(0.7);
 }
 .score-badge {
-  font-family: 'Bungee', cursive, sans-serif;
-  font-size: 26px;
-  color: #fff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 16px;
+  color: #ffdd00;
   letter-spacing: 1px;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.9), 0 0 12px rgba(255,255,255,0.3);
+  text-shadow: 2px 2px #000;
 }
 .combo-badge {
-  font-family: 'Bungee', cursive, sans-serif;
-  font-size: 14px;
-  color: var(--gold);
-  background: rgba(255, 165, 2, 0.18);
-  border: 1px solid rgba(255, 165, 2, 0.5);
-  border-radius: 8px;
-  padding: 2px 8px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  color: #ffbe0b;
+  background: #281c04;
+  border: 2px solid #ffbe0b;
+  border-radius: 4px;
+  padding: 3px 6px;
   opacity: 0;
   transform: scale(0.8);
   transition: all 0.2s;
@@ -129,19 +128,18 @@ canvas {
 }
 .btn-sound {
   pointer-events: auto;
-  background: rgba(16, 20, 26, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1.5px solid rgba(255, 255, 255, 0.15);
-  border-radius: 50%;
-  width: 42px;
-  height: 42px;
+  background: #111520;
+  border: 3px solid #323e54;
+  border-radius: 6px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-size: 19px;
+  font-size: 18px;
   cursor: pointer;
-  transition: transform 0.1s, background 0.2s;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.15), 0 6px 12px rgba(0,0,0,0.8);
 }
 .btn-sound:active {
   transform: scale(0.9);
@@ -160,54 +158,52 @@ canvas {
   gap: 12px;
 }
 .ctrl-btn {
-  background: rgba(22, 27, 36, 0.82);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.22);
-  border-radius: 20px;
+  background: #161b26;
+  border: 4px solid #33435c;
+  border-radius: 8px;
   color: #fff;
-  font-weight: 800;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.25);
+  box-shadow: inset 0 3px 0 rgba(255,255,255,0.25), 0 8px 20px rgba(0,0,0,0.9);
   touch-action: none;
   cursor: pointer;
   transition: transform 0.08s, background 0.1s, border-color 0.1s;
 }
 .ctrl-btn:active, .ctrl-btn.pressed {
   transform: scale(0.92);
-  background: rgba(255, 71, 87, 0.5);
-  border-color: #ff4757;
-  box-shadow: 0 2px 10px rgba(255, 71, 87, 0.6);
+  background: #ff2e43;
+  border-color: #ff99a4;
+  box-shadow: 0 2px 10px rgba(255, 46, 67, 0.8);
 }
 .btn-slap {
   flex: 1;
-  height: 72px;
-  font-size: 14px;
+  height: 70px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
 .btn-slap span.icon {
-  font-size: 26px;
+  font-size: 22px;
   margin-bottom: 2px;
 }
 .btn-shield {
-  width: 95px;
-  height: 72px;
-  font-size: 12px;
-  border-color: rgba(30, 144, 255, 0.6);
-  background: rgba(30, 144, 255, 0.22);
+  width: 90px;
+  height: 70px;
+  font-size: 10px;
+  border-color: #0077b6;
+  background: #03045e;
 }
 .btn-shield.active, .btn-shield:active {
-  background: rgba(30, 144, 255, 0.65) !important;
-  border-color: #1e90ff !important;
+  background: #00b4d8 !important;
+  border-color: #caf0f8 !important;
   transform: scale(0.92);
-  box-shadow: 0 0 25px rgba(30, 144, 255, 0.8);
+  box-shadow: 0 0 20px rgba(0, 180, 216, 0.8);
 }
 .btn-shield span.icon {
-  font-size: 24px;
+  font-size: 22px;
 }
 
 /* Modals & Screens */
@@ -217,9 +213,8 @@ canvas {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(8, 10, 14, 0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(4, 5, 8, 0.95);
+  border: 6px solid #283142;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -229,7 +224,6 @@ canvas {
   z-index: 100;
   transition: opacity 0.3s ease;
 }
-/* IMPORTANT : display: none empêche tout clic parasite sur le bouton REJOUER quand le modal est masqué */
 .modal-screen.hidden {
   opacity: 0;
   pointer-events: none !important;
@@ -237,38 +231,38 @@ canvas {
 }
 .title-box {
   text-align: center;
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 }
 .game-title {
   font-family: 'Press Start 2P', monospace;
-  font-size: 21px;
+  font-size: 22px;
   line-height: 1.4;
-  background: linear-gradient(180deg, #ffffff 0%, #ffd32a 45%, #ff4757 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.9));
-  margin-bottom: 6px;
+  color: #ffdd00;
+  text-shadow: 3px 3px #ff2e43, 6px 6px #000;
+  margin-bottom: 8px;
 }
 .game-subtitle {
-  font-size: 14px;
-  color: #ffa502;
-  font-weight: 800;
-  letter-spacing: 2.5px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: #00b4d8;
+  letter-spacing: 1px;
   text-transform: uppercase;
+  text-shadow: 1px 1px #000;
 }
 .how-to-play {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
-  padding: 16px 20px;
-  max-width: 360px;
+  background: #111520;
+  border: 3px solid #323e54;
+  border-radius: 8px;
+  padding: 14px 18px;
+  max-width: 380px;
   width: 100%;
-  margin-bottom: 24px;
-  font-size: 13.5px;
-  color: #ced6e0;
+  margin-bottom: 20px;
+  font-size: 12.5px;
+  color: #e2e8f0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.1);
 }
 .how-to-item {
   display: flex;
@@ -276,8 +270,8 @@ canvas {
   gap: 12px;
 }
 .how-to-item .item-icon {
-  font-size: 20px;
-  width: 28px;
+  font-size: 18px;
+  width: 24px;
   text-align: center;
   flex-shrink: 0;
 }
@@ -287,64 +281,66 @@ canvas {
 }
 .key-badge {
   display: inline-block;
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
-  border-radius: 5px;
-  padding: 1px 6px;
-  font-size: 11px;
-  font-weight: 800;
+  background: #222d42;
+  color: #ffdd00;
+  border: 1px solid #4a5c7d;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 10px;
+  font-family: 'Press Start 2P', monospace;
   margin: 0 2px;
   vertical-align: middle;
 }
 .btn-primary {
   font-family: 'Press Start 2P', monospace;
-  font-size: 15px;
-  padding: 16px 44px;
-  background: linear-gradient(135deg, #ff4757 0%, #ff6b81 100%);
+  font-size: 14px;
+  padding: 16px 38px;
+  background: #ff2e43;
   color: #fff;
-  border: none;
-  border-radius: 50px;
+  border: 3px solid #ffa3a9;
+  border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 10px 25px rgba(255, 71, 87, 0.5), inset 0 2px 0 rgba(255,255,255,0.3);
-  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 3px 0 rgba(255,255,255,0.4), 0 8px 20px rgba(255, 46, 67, 0.6);
+  transition: transform 0.1s, box-shadow 0.1s;
 }
 .btn-primary:active {
   transform: scale(0.95);
-  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+  box-shadow: 0 3px 10px rgba(255, 46, 67, 0.4);
 }
 .stats-box {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 .stat-item {
-  font-size: 16px;
-  color: #a4b0be;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  color: #94a3b8;
 }
 .stat-item strong {
-  font-family: 'Bungee', cursive, sans-serif;
-  font-size: 28px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
   color: #fff;
 }
 .stat-item.best strong {
-  color: var(--gold);
+  color: #ffbe0b;
 }
 
-#ev{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(8,10,16,.82);padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom));overflow:auto;font-family:'Outfit',-apple-system,"Segoe UI",Roboto,sans-serif}
+#ev{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(4,5,8,.92);padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom));overflow:auto;font-family:'Outfit',sans-serif}
 #ev.on{display:flex}
 .ev-box{width:min(94vw,520px);display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;color:#fff}
 .ev-scene{position:relative;width:min(100%,380px);padding-top:110px}
-.ev-scene img{width:100%;display:block;image-rendering:pixelated;background:#fff;border-radius:14px;border:3px solid #14161c}
-.ev-bubble{position:absolute;top:0;right:0;width:68%;background:#fff;color:#14161c;border:3px solid #14161c;border-radius:16px;padding:9px 12px;font-size:14px;font-weight:700;line-height:1.25;text-align:left}
-.ev-bubble:after{content:"";position:absolute;bottom:-18px;right:26%;border:8px solid transparent;border-top:15px solid #14161c}
-.ev-bubble:before{content:"";position:absolute;bottom:-12px;right:calc(26% + 3px);border:5px solid transparent;border-top:11px solid #fff;z-index:1}
-.ev-q{margin:0;font-size:16px;font-weight:600;line-height:1.35}
+.ev-scene img{width:100%;display:block;image-rendering:pixelated;background:#fff;border-radius:8px;border:3px solid #283142}
+.ev-bubble{position:absolute;top:0;right:0;width:68%;background:#111520;color:#fff;border:3px solid #323e54;border-radius:12px;padding:9px 12px;font-size:13px;font-weight:700;line-height:1.25;text-align:left}
+.ev-bubble:after{content:"";position:absolute;bottom:-16px;right:26%;border:8px solid transparent;border-top:14px solid #323e54}
+.ev-bubble:before{content:"";position:absolute;bottom:-11px;right:calc(26% + 3px);border:5px solid transparent;border-top:10px solid #111520;z-index:1}
+.ev-q{margin:0;font-family:'Press Start 2P',monospace;font-size:11px;line-height:1.4}
 .ev-btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;width:100%}
-.ev-btns button{flex:1 1 200px;font:800 16px 'Outfit',sans-serif;padding:14px 16px;border-radius:12px;border:3px solid #14161c;background:#ffd32a;color:#14161c;cursor:pointer}
-.ev-btns button:last-child{background:#ff4757;color:#fff}
-.ev-res{margin:0;min-height:30px;font:800 20px 'Outfit',sans-serif}
+.ev-btns button{flex:1 1 200px;font-family:'Press Start 2P',monospace;font-size:10px;padding:12px 14px;border-radius:6px;border:3px solid #323e54;background:#ffbe0b;color:#14161c;cursor:pointer}
+.ev-btns button:last-child{background:#ff2e43;color:#fff}
+.ev-res{margin:0;min-height:30px;font-family:'Press Start 2P',monospace;font-size:12px}
 </style>
 </head>
 <body>
