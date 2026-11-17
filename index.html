@@ -2,6 +2,25 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="build" content="20261117205219">
+<script>
+/* Toujours la dernière version : on recharge la page depuis le serveur et on relance si la version a changé */
+(function () {
+  try {
+    var cur = document.querySelector('meta[name=build]').content;
+    fetch(location.href.split('#')[0], { cache: 'reload' }).then(function (r) { return r.text(); }).then(function (txt) {
+      var m = txt.match(/<meta name="build" content="([^"]+)"/);
+      if (m && m[1] !== cur && !sessionStorage.getItem('pc_reload_' + m[1])) {
+        sessionStorage.setItem('pc_reload_' + m[1], '1');
+        location.reload();
+      }
+    }).catch(function () {});
+  } catch (e) {}
+})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#ff4757">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -726,21 +745,18 @@ function drawGJ(sc, ph, face, sl, flag = true) {
     RR(side * 15 - 4, -11 + sw, 8, 16, 4, JK);
     EL(side * 15, 6 + sw, 3.8, 3.8, '#e2b08a', 1.5);
     if (flag && side === (slapSide ? -slapSide : 1)) {
-      // petit drapeau tricolore
+      // petit drapeau palestinien
       LN(side * 15, 8 + sw, side * 15 + side * 3, -14 + sw, '#5b3b22', 2);
-      const fx = side * 15 + side * 3, fy = -14 + sw, wv = Math.sin(t * 9) * 1.5;
-      bp(); C.moveTo(fx, fy); C.lineTo(fx + side * 15, fy + wv); C.lineTo(fx + side * 15, fy + 10 + wv); C.lineTo(fx, fy + 10); C.closePath(); F('#fff', 1.4);
-      bp(); C.moveTo(fx, fy); C.lineTo(fx + side * 5, fy + wv / 3); C.lineTo(fx + side * 5, fy + 10 + wv / 3); C.lineTo(fx, fy + 10); C.closePath(); C.fillStyle = side > 0 ? '#2350b8' : '#d8323a'; C.fill();
-      bp(); C.moveTo(fx + side * 10, fy + wv * .66); C.lineTo(fx + side * 15, fy + wv); C.lineTo(fx + side * 15, fy + 10 + wv); C.lineTo(fx + side * 10, fy + 10 + wv * .66); C.closePath(); C.fillStyle = side > 0 ? '#d8323a' : '#2350b8'; C.fill();
+      const fx = side * 15 + side * 3, fy = -14 + sw, wv = Math.sin(t * 9) * 1.5, L = 16, Hh = 10;
+      const band = (y0, y1, col) => { bp(); C.moveTo(fx, fy + y0); C.lineTo(fx + side * L, fy + y0 + wv); C.lineTo(fx + side * L, fy + y1 + wv); C.lineTo(fx, fy + y1); C.closePath(); C.fillStyle = col; C.fill(); };
+      band(0, Hh / 3, '#16161a'); band(Hh / 3, 2 * Hh / 3, '#ffffff'); band(2 * Hh / 3, Hh, '#1f8a43');
+      bp(); C.moveTo(fx, fy); C.lineTo(fx + side * 6.5, fy + Hh / 2 + wv * .4); C.lineTo(fx, fy + Hh); C.closePath(); C.fillStyle = '#d32f2f'; C.fill();
+      bp(); C.moveTo(fx, fy); C.lineTo(fx + side * L, fy + wv); C.lineTo(fx + side * L, fy + Hh + wv); C.lineTo(fx, fy + Hh); C.closePath(); C.lineWidth = 1.4; C.strokeStyle = OL; C.stroke();
     }
   }
   RR(-14, -14, 28, 24, 9, JK);
   RR(-12, -12.5, 24, 20, 7, '#dcef1c');
   bp(); C.rect(-12, -6, 24, 3); C.rect(-12, 1.5, 24, 3); C.fillStyle = '#eef3f5'; C.fill();
-  // écusson drapeau palestinien
-  C.save(); C.translate(-5, -11); bp(); C.rect(0, 0, 10, 2.4); C.fillStyle = '#16161a'; C.fill(); bp(); C.rect(0, 2.4, 10, 2.4); C.fillStyle = '#fff'; C.fill();
-  bp(); C.rect(0, 4.8, 10, 2.4); C.fillStyle = '#1f8a43'; C.fill(); bp(); C.moveTo(0, 0); C.lineTo(4.2, 3.6); C.lineTo(0, 7.2); C.closePath(); C.fillStyle = '#d32f2f'; C.fill();
-  bp(); C.rect(0, 0, 10, 7.2); C.lineWidth = 1; C.strokeStyle = OL; C.stroke(); C.restore();
   // tête de dos : nuque, barbe, bonnet kaki
   EL(face * 3, -21, 9, 6.5, '#4b3423', 1.5);
   EL(0, -25, 11, 10.5, '#e2b08a', 1.8);
