@@ -32,6 +32,8 @@ jobs:
         run: |
           mkdir -p _site
           cp index.html _site/
+          sed -i "s|<meta name=\"build\" content=\"[^\"]*\">|<meta name=\"build\" content=\"${GITHUB_SHA}\">|" _site/index.html
+          grep -c "${GITHUB_SHA}" _site/index.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
